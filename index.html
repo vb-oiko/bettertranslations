@@ -144,6 +144,20 @@ h1 .line { display: inline; }
 }
 .btn:active { background: color-mix(in srgb, var(--color-text) 14%, transparent); }
 
+.site-footer {
+  padding: clamp(24px, 5vw, 72px);
+  padding-top: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  text-wrap: pretty;
+}
+.site-footer p { margin: 0; max-width: 68ch; }
+
+/* The middots are decorative separators between fragments that already read
+   as separate lines once the footer wraps - hide them from screen readers. */
+.site-footer .sep { padding: 0 6px; }
+
 @media (min-width: 900px) {
   h1 .line { display: block; }
 }
@@ -163,6 +177,10 @@ h1 .line { display: inline; }
   </div>
 </main>
 
+<footer class="site-footer">
+  <p>BetterTranslations<span class="sep" aria-hidden="true">&middot;</span>Oakville, ON<span class="sep" aria-hidden="true">&middot;</span>Translation services for immigration professionals. Not a law firm; no legal advice provided.</p>
+</footer>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -172,7 +190,14 @@ h1 .line { display: inline; }
   "email": "hello@bettertranslations.co",
   "description": "Certified Ukrainian and Russian document translations for Canadian immigration professionals. 48-hour turnaround with sworn affidavit and portal-ready PDF assembly.",
   "areaServed": "CA",
-  "serviceType": "Certified document translation"
+  "serviceType": "Certified document translation",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Oakville",
+    "addressRegion": "ON",
+    "addressCountry": "CA"
+  },
+  "disambiguatingDescription": "Translation services for immigration professionals. Not a law firm; no legal advice provided."
 }
 </script>
 
