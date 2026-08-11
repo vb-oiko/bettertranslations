@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+# Provenance only, not part of the site. The original export in here is a
+# JS bundle that renders the same copy as the landing page - letting it get
+# indexed would just create a duplicate of the homepage under a worse title.
+Disallow: /source/
+
+Sitemap: https://bettertranslations.co/sitemap.xml

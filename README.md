@@ -5,7 +5,23 @@ Single-page landing site for BetterTranslations.co, served from GitHub Pages.
 ## Contents
 
 - `index.html` - the entire site. One static file, no JavaScript, no build step, no external requests.
+- `og.png` - the 2400x1260 social preview image referenced by the `og:image` tags.
+- `robots.txt`, `sitemap.xml`, `CNAME` - hosting metadata. `CNAME` is managed by GitHub Pages; do not edit it by hand.
 - `source/BetterTranslations - Landing Page.html` - the original Claude artifact export the design came from. Kept for provenance only; it is not served.
+- `source/og-image.html` - the source used to render `og.png`. See below.
+
+## Regenerating og.png
+
+`og.png` is a screenshot of `source/og-image.html`, which is a standalone 1200x630 page with Archivo inlined. Edit the HTML, then re-render at 2x:
+
+```
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless --disable-gpu --force-device-scale-factor=2 \
+  --window-size=1200,630 --hide-scrollbars \
+  --screenshot=og.png "file://$PWD/source/og-image.html"
+```
+
+If you change the image's dimensions, update the `og:image:width` and `og:image:height` tags in `index.html` to match, and re-scrape the URL in the LinkedIn Post Inspector and Facebook Sharing Debugger - both cache the old image indefinitely otherwise.
 
 ## How index.html was made
 
