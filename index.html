@@ -65,7 +65,9 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  min-height: 100vh;
+  /* svh, not vh: 100vh is the viewport with the mobile toolbars retracted, so a
+     100vh page hides its last ~100px behind the URL bar on first load. */
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   background: var(--color-bg);
@@ -108,14 +110,27 @@ h1 {
   line-height: 1.15;
   letter-spacing: -0.015em;
   margin: 0;
-  text-wrap: balance;
 }
 
-/* The line breaks are art direction, not content. Each line is a span that
-   stays inline on narrow screens - the whitespace between spans becomes a
-   real space, so the headline wraps naturally - and goes block-level at the
-   width where the intended three-line composition actually fits. */
+/* The headline breaks on meaning, not on measure: each line is one idea, so
+   the three lines stack as a list of promises. Each is a span that goes
+   block-level from 600px up - the width where the longest line still fits,
+   since the font size tracks the viewport above that. Below it the spans stay
+   inline, the whitespace between them becomes a real space, and the headline
+   wraps naturally - filling each line, since balance on a phone-width column
+   shatters the headline into stubby half-width lines instead. */
 h1 .line { display: inline; }
+
+/* Wrapped into one run, the last line needs the connective the line break was
+   doing the work of - so the hyphen comes back only while the lines are inline. */
+@media (max-width: 599px) {
+  h1 { text-wrap: pretty; }
+  h1 .line:last-child::before { content: "- "; }
+}
+
+@media (min-width: 600px) {
+  h1 .line { display: block; }
+}
 
 .lede {
   font-size: clamp(16px, 1.6vw, 18px);
@@ -124,6 +139,20 @@ h1 .line { display: inline; }
   max-width: 62ch;
   color: color-mix(in srgb, var(--color-text) 78%, transparent);
   text-wrap: pretty;
+}
+
+/* One clause per line, echoing the headline: what it is, who it is for, what
+   arrives, when it is usable, what else is covered. The clauses are cut short
+   enough to fit the 62ch measure on one line each (the longest renders at
+   561px against a 575px measure), so from 600px up each is its own block and
+   the breaks land on meaning. Below that they run inline as ordinary prose -
+   at phone widths every clause wraps anyway, and blocks would read as stranded
+   fragments rather than a stack. */
+@media (min-width: 600px) {
+  .lede .line {
+    display: block;
+    text-wrap: pretty;
+  }
 }
 
 .cta-row { margin-top: 36px; }
@@ -165,9 +194,20 @@ h1 .line { display: inline; }
    as separate lines once the footer wraps - hide them from screen readers. */
 .site-footer .sep { padding: 0 6px; }
 
-@media (min-width: 900px) {
-  h1 .line { display: block; }
+/* The vertical padding is sized off the viewport width, which says nothing
+   about how much height there is to spend: at 1440x700 the three bands cost
+   288px and push the footer 72px below the fold. On a short viewport the
+   spacing follows the height instead, so the page stays one screen. Tall
+   viewports keep the roomier composition untouched. */
+@media (max-height: 820px) {
+  .site-header { padding-top: clamp(20px, 4vh, 72px); }
+  .site-main {
+    padding-top: clamp(16px, 3vh, 72px);
+    padding-bottom: clamp(16px, 3vh, 72px);
+  }
+  .site-footer { padding-bottom: clamp(20px, 4vh, 72px); }
 }
+
 </style>
 </head>
 <body>
@@ -177,15 +217,16 @@ h1 .line { display: inline; }
 </header>
 
 <main class="site-main">
-  <h1><span class="line">Portal-Ready PDFs</span> <span class="line">for Your Clients' Ukrainian Documents</span> <span class="line">- Back in 48 Hours</span></h1>
-  <p class="lede">Certified translation of documents issued in Ukraine, for Canadian immigration lawyers, consultants and paralegals. One merged file per document - original, translation and sworn affidavit - ready to upload, so your paralegals never touch the assembly. Soviet-era records are covered, including those written in Russian.</p>
+  <h1><span class="line">Portal-Ready PDFs</span> <span class="line">for Your Clients' Ukrainian Documents</span> <span class="line">Back&nbsp;in&nbsp;48&nbsp;Hours</span></h1>
+  <p class="lede"><span class="line">Certified translation of documents issued in Ukraine.</span> <span class="line">For Canadian immigration lawyers, consultants and paralegals.</span> <span class="line">One merged file per document&nbsp;- original, translation and sworn affidavit.</span> <span class="line">Ready to upload, so your paralegals never touch the assembly.</span> <span class="line">Soviet-era records are covered, including those written in Russian.</span></p>
   <div class="cta-row">
     <a class="btn" href="mailto:info@bettertranslations.co?subject=3-Document%20Free%20Pilot">Email us for a 3-Document Free Pilot</a>
   </div>
 </main>
 
 <footer class="site-footer">
-  <p>BetterTranslations<span class="sep" aria-hidden="true">&middot;</span>Oakville, ON<span class="sep" aria-hidden="true">&middot;</span>Translation services for immigration professionals. Not a law firm; no legal advice provided.</p>
+  <p>BetterTranslations<span class="sep" aria-hidden="true">&middot;</span>Oakville,&nbsp;ON<span class="sep" aria-hidden="true">&middot;</span>Translation services for immigration professionals.</p>
+  <p>Not a law firm; no legal advice provided.</p>
 </footer>
 
 <script type="application/ld+json">
